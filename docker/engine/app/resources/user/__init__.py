@@ -15,10 +15,10 @@ def get_users():
 
 @app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
-    user = User.query.get(id)
+    user = User.query.filter_by(id=id).all()
     if not user:
         abort(404, f'User {id} not found.')
-    return jsonify({"user": [x.serialized for x in user]}), 200
+    return jsonify({"users": [x.serialized for x in user]}), 200
 
 
 @app.route('/users', methods=['POST'])
@@ -72,14 +72,15 @@ def update_user(id):
 
     user.admin = admin
 
-    group_id = data.get("group")
-    if group_id == [] or None:
+    group = data["group"]
+    if group == [] or None:
         user.group.clear()
     else:
-        x = Group.query.filter_by(id=group_id).all()
-        if not x:
-            abort(404, f"Group {x} not found.")
-        user.group.append(x)
+        for group_id in group:
+            group = Group.query.filter_by(id=group_id).first()
+            if not group:
+                abort(404, f'Group {group_id} not found.')
+            user.group.append(group)
 
     db.session.add(user)
     db.session.commit()

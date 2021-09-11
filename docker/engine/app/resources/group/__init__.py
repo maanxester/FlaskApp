@@ -13,9 +13,9 @@ def get_groups():
     return jsonify({"groups": [x.serialized for x in groups]})
 
 
-@app.route('/group/<int:id>', methods=['GET'])
+@app.route('/groups/<int:id>', methods=['GET'])
 def get_group(id):
-    group = Group.query.get(id)
+    group = Group.query.filter_by(id=id).all()
     if not group:
         abort(404, f'Group {id} not found.')
     return jsonify({"group": [x.serialized for x in group]})
@@ -66,14 +66,15 @@ def update_group(id):
     if name:
         group.name = name
 
-    user_id = data.get("user")
-    if user_id == [] or None:
+    user = data["user"]
+    if user == [] or None:
         group.user.clear()
     else:
-        x = User.query.filter_by(id=user_id).all()
-        if not x:
-            abort(404, f'User {x} not found.')
-        group.user.append(x)
+        for user_id in user:
+            user = User.query.filter_by(id=user_id).first()
+            if not user:
+                abort(404, f'User {user} not found.')
+            group.user.append(user)
 
     db.session.add(group)
     db.session.commit()

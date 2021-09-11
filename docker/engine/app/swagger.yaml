@@ -1,0 +1,375 @@
+swagger: "2.0"
+info:
+  title: Swagger API
+  description: Swagger Demo API by maanxester
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /users:
+    description: Users Resources
+    get:
+      tags:
+        - "Users"
+      description: Operation to Fetch Users
+      summary: List Users
+      operationId: GetUser
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: jonas
+                    password:
+                      type: string
+                      example: Password Hash
+                    admin:
+                      type: boolean
+                      example: False
+                    group:
+                      type: string
+                      example: developer
+        404:
+          description: Failed Response
+    post:
+      tags:
+        - "Users"
+      description: Add a new User
+      summary: Create User
+      operationId: PostNewUser
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            id: User
+            required:
+              - name
+              - password
+              - admin
+              - group
+            properties:
+              name:
+                type: string
+                description: User Name
+              password:
+                type: string
+                description: Password Hash
+              admin:
+                type: boolean
+                description: Admin Value
+              group:
+                type: array
+                items:
+                  type: integer
+                  example: group_id
+                  description: User Groups
+      responses:
+        201:
+          description: Record Successfully added
+        400:
+          description: No data provided
+  /users/{id}:
+    description: Get User based on Path Parameter
+    get:
+      tags:
+        - "Users"
+      summary: List User
+      operationId: GetUserId
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 2
+                    name:
+                      type: string
+                      example: john
+                    password_hash:
+                      type: string
+                      example: Password Hash
+                    admin:
+                      type: boolean
+                      example: False
+                    group:
+                      type: string
+                      example: developer
+        404:
+          description: User Not Found
+    delete:
+      tags:
+        - "Users"
+      summary: Delete User
+      operationId: DeleteUserId
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 2
+                    name:
+                      type: string
+                      example: john
+                    password:
+                      type: string
+                      example: Password Hash
+                    admin:
+                      type: boolean
+                      example: False
+                    group:
+                      type: string
+                      example: developer
+        404:
+          description: User Not Found
+    put:
+      tags:
+        - "Users"
+      description: Update a User
+      summary: Update User
+      operationId: PutUser
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: body
+          in: body
+          required: true
+          schema:
+            id: User
+            required:
+              - name
+              - password
+              - admin
+            properties:
+              name:
+                type: string
+                description: User Name
+              password:
+                type: string
+                description: Password Hash
+              admin:
+                type: boolean
+                description: Admin Value
+              group:
+                type: array
+                items:
+                  type: integer
+                  example: group_id
+                  description: User Groups
+      responses:
+        200:
+          description: Success
+        400:
+          description: No data provided
+        404:
+          description: User Not Found
+  /groups:
+    description: Groups Resource
+    get:
+      tags:
+        - "Groups"
+      description: Operation to Fetch Groups
+      summary: List Groups
+      operationId: GetGroup
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: developer
+                    users:
+                      type: string
+                      example: matheus
+        404:
+          description: No Groups Found
+    post:
+      description: Add a new Group
+      tags:
+        - "Groups"
+      summary: Create Group
+      operationId: PostNewGroup
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            id: Group
+            required:
+              - name
+              - user
+            properties:
+              name:
+                type: string
+                description: Group Name
+              user:
+                type: array
+                items:
+                  type: integer
+                  example: user_id
+                  description: Group Users
+      responses:
+        201:
+          description: Record Successfully added
+        400:
+          description: No data provided
+  /groups/{id}:
+    description: Get Group based on Path Parameter
+    get:
+      tags:
+        - "Groups"
+      summary: List Group
+      operationId: GetGroupId
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 2
+                    name:
+                      type: string
+                      example: developer
+                    users:
+                      type: string
+                      example: matheus
+        404:
+          description: Group Not Found
+    delete:
+      tags:
+        - "Groups"
+      summary: Delete Group
+      operationId: DeleteGroupId
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 2
+                    name:
+                      type: string
+                      example: developer
+                    users:
+                      type: string
+                      example: matheus
+        404:
+          description: Group Not Found
+    put:
+      tags:
+        - "Groups"
+      description: Update a Group
+      summary: Update Group
+      operationId: PutGroup
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: body
+          in: body
+          required: true
+          schema:
+            id: Group
+            required:
+              - name
+              - user
+            properties:
+              name:
+                type: string
+                description: User Name
+              user:
+                type: array
+                items:
+                  type: integer
+                  example: user_id
+                  description: Group Users
+      responses:
+        200:
+          description: Success
+        400:
+          description: No data provided
+        404:
+          description: Group Not Found
