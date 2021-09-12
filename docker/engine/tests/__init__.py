@@ -11,6 +11,13 @@ def create_user():
     return user.id
 
 
+def create_group():
+    group = Group(name="name")
+    db.session.add(group)
+    db.session.commit()
+    return group.id
+
+
 class ProjectTest(TestCase):
     def setUp(self):
         db.create_all()

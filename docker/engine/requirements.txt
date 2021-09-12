@@ -3,6 +3,7 @@ attrs==21.2.0
 click==8.0.1
 flasgger==0.9.5
 Flask==2.0.1
+flask-marshmallow==0.14.0
 Flask-Migrate==3.1.0
 Flask-SQLAlchemy==2.5.1
 Flask-Testing==0.8.1
@@ -14,6 +15,8 @@ Jinja2==3.0.1
 jsonschema==3.2.0
 Mako==1.1.5
 MarkupSafe==2.0.1
+marshmallow==3.13.0
+marshmallow-sqlalchemy==0.26.1
 mistune==0.8.4
 pyrsistent==0.18.0
 PyYAML==5.4.1

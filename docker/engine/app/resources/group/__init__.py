@@ -3,6 +3,14 @@ from engine.app import app, db
 from flask import request, abort, jsonify
 from engine.app.models.users import User
 from engine.app.models.groups import Group
+from engine.app.schemas.group_schema import GroupSchema, ValidationError
+
+
+def validations():
+    data = request.json
+    name = data.get("name")
+    if not name:
+        abort(400, "Name is required.")
 
 
 @app.route('/groups', methods=['GET'])
@@ -24,8 +32,13 @@ def get_group(id):
 @app.route('/groups', methods=['POST'])
 def create_group():
     data = request.json
-    if not data:
-        abort(400, 'No data provided.')
+    schema = GroupSchema
+    try:
+        schema.load(data)
+    except ValidationError:
+        abort(400, "No data provided.")
+
+    validations()
 
     group = Group(name=data["name"])
     for user_id in data["user"]:
@@ -52,11 +65,14 @@ def delete_group(id):
 def update_group(id):
 
     data = request.json
-    if not data:
-        abort(400, 'No data provived.')
+    schema = GroupSchema()
+    try:
+        schema.load(data)
+    except ValidationError:
+        abort(400, "No data provided.")
 
     name = data.get("name")
-    if name == '':
+    if not name:
         abort(400, "Required to enter valid name")
 
     group = Group.query.get(id)

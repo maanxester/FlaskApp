@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os, uuid
 from flasgger import Swagger
+from engine.app.schemas import ma
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -28,4 +29,5 @@ Migrate(app, db)
 
 
 def create_app():
+    ma.init_app(app)
     return app
