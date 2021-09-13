@@ -30,6 +30,8 @@ Migrate(app, db)
 
 
 def create_app():
+    from engine.app.resources.api import api
+    app.register_blueprint(api)
     register_error_handlers(app)
     ma.init_app(app)
     return app

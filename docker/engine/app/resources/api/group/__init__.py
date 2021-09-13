@@ -1,5 +1,6 @@
 
 from engine.app import app, db
+from engine.app.resources.api import api
 from flask import request, abort, jsonify
 from engine.app.models.users import User
 from engine.app.models.groups import Group
@@ -12,7 +13,7 @@ def validations(data):
         abort(400, "Name is required.")
 
 
-@app.route('/groups', methods=['GET'])
+@api.route('/groups', methods=['GET'])
 def get_groups():
     groups = Group.query.all()
     if not groups:
@@ -20,7 +21,7 @@ def get_groups():
     return jsonify({"groups": [x.serialized for x in groups]})
 
 
-@app.route('/groups/<int:id>', methods=['GET'])
+@api.route('/groups/<int:id>', methods=['GET'])
 def get_group(id):
     group = Group.query.filter_by(id=id).all()
     if not group:
@@ -28,7 +29,7 @@ def get_group(id):
     return jsonify({"group": [x.serialized for x in group]})
 
 
-@app.route('/groups', methods=['POST'])
+@api.route('/groups', methods=['POST'])
 def create_group():
     data = request.json
     schema = GroupSchema()
@@ -50,7 +51,7 @@ def create_group():
     return jsonify(group.serialized), 201
 
 
-@app.route('/groups/<int:id>', methods=['DELETE'])
+@api.route('/groups/<int:id>', methods=['DELETE'])
 def delete_group(id):
     group = Group.query.get(id)
     if not group:
@@ -60,7 +61,7 @@ def delete_group(id):
     return jsonify({"status": True})
 
 
-@app.route('/groups/<int:id>', methods=['PUT'])
+@api.route('/groups/<int:id>', methods=['PUT'])
 def update_group(id):
 
     data = request.json

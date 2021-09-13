@@ -1,2 +1,2 @@
-from engine.app.resources.group import *
-from engine.app.resources.user import *
+from engine.app.resources.api.group import *
+from engine.app.resources.api.user import *

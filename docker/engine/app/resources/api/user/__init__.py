@@ -1,6 +1,7 @@
 
 from engine.app import app, db
 from flask import jsonify, request, abort
+from engine.app.resources.api import api
 from engine.app.models.users import User
 from engine.app.models.groups import Group
 from engine.app.schemas import ValidationError, user_schema
@@ -16,7 +17,7 @@ def validations(data):
         abort(400, "Password is required.")
 
 
-@app.route('/users',  methods=['GET'])
+@api.route('/users',  methods=['GET'])
 def get_users():
     users = User.query.all()
     if not users:
@@ -24,7 +25,7 @@ def get_users():
     return jsonify({"users": [x.serialized for x in users]}), 200
 
 
-@app.route('/users/<int:id>', methods=['GET'])
+@api.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.filter_by(id=id).all()
     if not user:
@@ -32,7 +33,7 @@ def get_user(id):
     return jsonify({"users": [x.serialized for x in user]}), 200
 
 
-@app.route('/users', methods=['POST'])
+@api.route('/users', methods=['POST'])
 def create_user():
     data = request.json
     schema = user_schema.UserSchema()
@@ -54,7 +55,7 @@ def create_user():
     return jsonify(user.serialized), 201
 
 
-@app.route('/users/<int:id>', methods=['DELETE'])
+@api.route('/users/<int:id>', methods=['DELETE'])
 def delete_user(id):
     user = User.query.get(id)
     if not user:
@@ -64,7 +65,7 @@ def delete_user(id):
     return jsonify({"status": True})
 
 
-@app.route('/users/<int:id>', methods=['PUT'])
+@api.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
     data = request.json
     schema = user_schema.UserSchema()
