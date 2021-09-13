@@ -6,8 +6,7 @@ from engine.app.models.groups import Group
 from engine.app.schemas.group_schema import GroupSchema, ValidationError
 
 
-def validations():
-    data = request.json
+def validations(data):
     name = data.get("name")
     if not name:
         abort(400, "Name is required.")
@@ -32,13 +31,13 @@ def get_group(id):
 @app.route('/groups', methods=['POST'])
 def create_group():
     data = request.json
-    schema = GroupSchema
+    schema = GroupSchema()
     try:
         schema.load(data)
     except ValidationError:
         abort(400, "No data provided.")
 
-    validations()
+    validations(data)
 
     group = Group(name=data["name"])
     for user_id in data["user"]:
@@ -55,7 +54,7 @@ def create_group():
 def delete_group(id):
     group = Group.query.get(id)
     if not group:
-        abort(404, f'Group {group} not found.')
+        abort(404, f'Group not found.')
     db.session.delete(group)
     db.session.commit()
     return jsonify({"status": True})
@@ -73,7 +72,7 @@ def update_group(id):
 
     name = data.get("name")
     if not name:
-        abort(400, "Required to enter valid name")
+        abort(400, "Name is required")
 
     group = Group.query.get(id)
     if not group:

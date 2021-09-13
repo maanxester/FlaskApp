@@ -6,8 +6,7 @@ from engine.app.models.groups import Group
 from engine.app.schemas import ValidationError, user_schema
 
 
-def validations():
-    data = request.json
+def validations(data):
     name = data.get("name")
     if not name:
         abort(400, "Name is required.")
@@ -15,10 +14,6 @@ def validations():
     password = data.get("password")
     if not password:
         abort(400, "Password is required.")
-
-    admin = data.get("admin")
-    if not admin:
-        abort(400, "Admin Value is required.")
 
 
 @app.route('/users',  methods=['GET'])
@@ -46,7 +41,7 @@ def create_user():
     except ValidationError:
         abort(400, "No data provided.")
 
-    validations()
+    validations(data)
 
     user = User(name=data["name"], password=data["password"], admin=data["admin"])
     for group_id in data["group"]:
@@ -109,8 +104,3 @@ def update_user(id):
     db.session.add(user)
     db.session.commit()
     return jsonify(user.serialized)
-
-
-
-
-

@@ -16,6 +16,12 @@ payload_post_no_group = {
     "group": [1]
 }
 
+payload_post_no_name = {
+    "password": "unittest",
+    "admin": False,
+    "group": []
+}
+
 payload_put = {
     "name": "name",
     "password": "password_hash1",
@@ -34,6 +40,12 @@ payload_put_no_group = {
     "password": "password_hash",
     "admin": False,
     "group": [1]
+}
+
+payload_post_no_password = {
+    "name": "unittest",
+    "admin": False,
+    "group": []
 }
 
 
@@ -85,6 +97,18 @@ class UserResourceTest(ProjectTest):
             response = client.post("/users") ## Sem JSON
             self.assertEqual(response.status_code, 400)
             self.assertIn("No data provided.", response.data.decode())
+
+    def test_post_no_name(self):
+        with app.test_client() as client:
+            response = client.post("/users", json=payload_post_no_name)
+            self.assertEqual(response.status_code, 400)
+            self.assertIn("Name is required", response.data.decode())
+
+    def test_post_no_password(self):
+        with app.test_client() as client:
+            response = client.post("/users", json=payload_post_no_password)
+            self.assertEqual(response.status_code, 400)
+            self.assertIn("Password is required", response.data.decode())
 
     def test_post_group_not_found(self):
         with app.test_client() as client:
@@ -143,4 +167,3 @@ class UserResourceTest(ProjectTest):
             group_id = payload_post_no_group["group"][0]
             self.assertEqual(response.status_code, 404)
             self.assertIn(f"Group {group_id} not found.", response.data.decode())
-
