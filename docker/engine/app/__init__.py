@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 import os, uuid
 from flasgger import Swagger
 from engine.app.schemas import ma
+from engine.app.utils import register_error_handlers
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -29,5 +30,6 @@ Migrate(app, db)
 
 
 def create_app():
+    register_error_handlers(app)
     ma.init_app(app)
     return app
