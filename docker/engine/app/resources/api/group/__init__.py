@@ -1,6 +1,6 @@
 
 from engine.app import app, db
-from engine.app.resources.api import api
+from engine.app.resources.api import api, auth
 from flask import request, abort, jsonify
 from engine.app.models.users import User
 from engine.app.models.groups import Group
@@ -14,6 +14,7 @@ def validations(data):
 
 
 @api.route('/groups', methods=['GET'])
+@auth
 def get_groups():
     groups = Group.query.all()
     if not groups:
@@ -22,6 +23,7 @@ def get_groups():
 
 
 @api.route('/groups/<int:id>', methods=['GET'])
+@auth
 def get_group(id):
     group = Group.query.filter_by(id=id).all()
     if not group:
@@ -30,6 +32,7 @@ def get_group(id):
 
 
 @api.route('/groups', methods=['POST'])
+@auth
 def create_group():
     data = request.json
     schema = GroupSchema()
@@ -52,6 +55,7 @@ def create_group():
 
 
 @api.route('/groups/<int:id>', methods=['DELETE'])
+@auth
 def delete_group(id):
     group = Group.query.get(id)
     if not group:
@@ -62,6 +66,7 @@ def delete_group(id):
 
 
 @api.route('/groups/<int:id>', methods=['PUT'])
+@auth
 def update_group(id):
 
     data = request.json

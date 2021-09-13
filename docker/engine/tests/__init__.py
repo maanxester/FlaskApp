@@ -18,6 +18,12 @@ def create_group():
     return group.id
 
 
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic YWRtaW46YWRtaW4='
+}
+
+
 class ProjectTest(TestCase):
     def setUp(self):
         db.create_all()

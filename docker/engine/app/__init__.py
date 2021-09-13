@@ -10,6 +10,9 @@ from engine.app.utils import register_error_handlers
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+
 app = Flask(__name__)
 
 if os.environ["FLASK_ENV"] == 'testing':
